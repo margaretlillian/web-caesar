@@ -85,7 +85,7 @@ form = """{HEADER}
 
 error = """{HEADER}
 <h2>Error!</h2>
-    <p>Please enter a valid number. Letters and punctuation (including commas in larger numbers) are not allowed.</p>
+    <p>Please enter a valid number. Letters, punctuation (including commas in larger numbers), and decimals are not allowed.</p>
     <p><a href="/">Return back</a></p>
 
     {FOOTER}
