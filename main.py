@@ -4,52 +4,66 @@ from caesar import alphabet, rotate_string
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-form = """<!DOCTYPE html>
+header = """<!DOCTYPE html>
 <html>
     <head>
     <title>Caesar Cipher</title>
     <style type="text/css">
-    body {{
+    body {
         background: #f9f9f9;
         color: #666;
         font: lighter 1.5em arial, sans-serif;
-    }}
-    p, input {{
+    }
+    a{
+        color: #117a9e;
+        font-weight: bold;
+        text-decoration: none;
+        border-bottom: 1px solid #536870;
+    }
+    p, input {
         font-size: 0.75em;
-    }}
-    h1 {{
+    }
+    h1 {
         text-align: center;
         text-transform: uppercase;
         font-weight: lighter;
         padding-bottom: 0;
         margin-bottom: 0;
-    }}       
-
-    form {{ 
+    }       
+    h2 {
+        font-weight: lighter;
+    }
+    div {
         margin: 10px auto;
         width: 540px;
         border-radius: 10px;
         background-color: #ced9db;
         padding: 20px;
-                }}
-            input, textarea {{
+                }
+            input, textarea {
                 background: #edf9fc;
                 border: 1px solid #0e82a0;
                 color: #33535b;
-            }}
-            textarea {{
+            }
+            textarea {
                 margin: 10px 0;
                 width: 500px;
                 height: 120px;
                 font: 1em arial, sans-serif;
-            }}
+            }
     </style>
     </head>
 
     <body>
-        <div>
-        <h1>Caesar Cipher</h1>
         
+        <h1>Caesar Cipher</h1>
+        <div>"""
+footer = """
+        </div>
+    </body>
+</html>"""
+
+form = """{HEADER}
         <form method="post">
             <p>The Caesar Cipher iterates over each character in the message, rotating each letter x number of times.
             For example, a rotation of 1 would make the word "thing" become "uijoh". 
@@ -60,27 +74,38 @@ form = """<!DOCTYPE html>
 
             <label>
             <br><br>Enter the message to encrypt.<br>
-            <textarea name="text">{0}
-            </textarea>
+            <textarea name="text">{TEXT}
+ </textarea>
             </label>
             
             <input type="submit" value="Encrypt">
         </form>
-        </div>
-    </body>
-</html>"""
+{FOOTER}"""
+
+
+error = """{HEADER}
+<h2>Error!</h2>
+    <p>Please enter a valid number. Letters and punctuation (including commas in larger numbers) are not allowed.</p>
+    <p><a href="/">Return back</a></p>
+
+    {FOOTER}
+    """
 
 @app.route("/")
 
 def index():
-    return form.format("")
+    return form.format(HEADER=header, TEXT="", FOOTER=footer)
 
 @app.route("/", methods=['POST'])
 
 def encrypt():
     #request.form(name-of-thing-being-requested)
-    rot = request.form["rot"]
-    text = request.form["text"]
-    new_text = rotate_string(text, int(rot))
-    return form.format(new_text)
+    try:
+        rot = request.form["rot"]
+        text = request.form["text"]
+        new_text = rotate_string(text, int(rot))
+    except ValueError:
+        return error.format(HEADER=header, FOOTER=footer)
+    else:
+        return form.format(HEADER=header, TEXT=new_text, FOOTER=footer)
 app.run()
