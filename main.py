@@ -1,5 +1,5 @@
 from flask import Flask, request
-from caesar import alphabet, rotate_string
+from caesar import rotate_string
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -65,7 +65,7 @@ footer = """
 
 form = """{HEADER}
         <form method="post">
-            <p>The Caesar Cipher iterates over each character in the message, rotating each letter x number of times.
+            <p>The Caesar Cipher rotates each character in the message x number of times.
             For example, a rotation of 1 would make the word "thing" become "uijoh". 
             Enter a message you want to encrypt and how many times to rotate the characters. </p>
             <label>
